@@ -9,7 +9,8 @@
   },
   "keywords": [
     "inels",
-    "homebridge"
+    "homebridge",
+    "homebridge-plugin"
   ],
   "author": "Jozef Lang <developer@jozeflang.com> (http://www.jozeflang.com)",
   "license": "GPL-3.0",
