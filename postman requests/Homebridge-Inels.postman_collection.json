@@ -1,0 +1,25 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Homebridge-Inels",
+		"_postman_id": "285242c5-270a-ce5a-14d7-aedf39958721",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://20.15.10.1/api/devices/49963",
+			"request": {
+				"url": "http://20.15.10.1/api/devices/49963",
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \"red\": 100,\n    \"green\": 255,\n    \"blue\":100,\n    \"brightness\": 255,\n    \"demo\":\"on\"\n } "
+				},
+				"description": "Change RGB lightbulb"
+			},
+			"response": []
+		}
+	]
+}
