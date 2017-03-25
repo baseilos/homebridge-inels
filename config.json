@@ -17,7 +17,7 @@
       "http_method": "PUT",
       "multiswitch": [
         { "name" : "Lightbulb 1"     , "path" : "devices/49963" },
-        { "name" : "Lightbulb 2"     , "path" : "devices/49963" }
+        { "name" : "Lightbulb 2"     , "path" : "devices/53139" }
 
       ]
     }
