@@ -34,6 +34,9 @@ function Inels(log, config) {
             break;
 
         case 'multiswitch':
+            this.onBody  = config.on_body          || '';
+            this.offBody = config.off_body         || '';
+
             this.multiswitch = config.multiswitch;
             break;
 
@@ -45,18 +48,19 @@ function Inels(log, config) {
 Inels.prototype = {
 
     httpRequest: function(url, body, method, username, password, sendimmediately, callback) {
+        console.log(url,body,method);
         request({
                 url: url,
-                body: body,
+                json: body,
                 method: method,
-                rejectUnauthorized: false,
-                auth: {
-                    user: username,
-                    pass: password,
-                    sendImmediately: sendimmediately
+                headers: {
+                    'Content-Length': JSON.stringify(body).length,
+                    'Content-Type': 'application/json'
                 }
+
             },
             function(error, response, body) {
+                console.log(error, response.statusCode, response.statusMessage);
                 callback(error, response, body);
             });
     },
@@ -77,9 +81,11 @@ Inels.prototype = {
                     callback(new Error('No power state urls defined.'));
                     return;
                 }
+                this.log(powerState);
 
                 reqUrl  = powerState ? this.onUrl  : this.offUrl;
                 reqBody = powerState ? this.onBody : this.offBody;
+                this.log(reqBody, reqUrl);
 
                 break;
 
@@ -113,6 +119,8 @@ Inels.prototype = {
                         break;
                     case 'multiswitch':
                         this.log('==> ' + targetService.subtype);
+                        this.log.info('Body ==> ' + reqBody);
+
                         break;
                     default:
                         this.log.error('Unknown type in request callback');

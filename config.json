@@ -11,27 +11,23 @@
   "accessories": [
     {
       "accessory": "iNels",
-      "type": "multiswitch",
-      "name": "My iNels",
-      "host": "http://20.15.10.1/api",
+      "type": "switch",
+      "name": "living room light",
+      "host": "http://20.15.10.1/api/devices",
+      "on"  : "/53139",
+      "off" : "/53139",
       "http_method": "PUT",
       "on_body":{ "red": 100,
         "green": 255,
         "blue":100,
-        "brightness": 255,
-        "demo":"on"
+        "brightness": 255
       },
       "off_body": { "red": 100,
         "green": 255,
         "blue":0,
-        "brightness": 100,
-        "demo":"on"
-      },
-      "multiswitch": [
-        { "name" : "Lightbulb 1"     , "path" : "devices/49963" },
-        { "name" : "Lightbulb 2"     , "path" : "devices/53139" }
+        "brightness": 100
+      }
 
-      ]
     }
   ]
 }
