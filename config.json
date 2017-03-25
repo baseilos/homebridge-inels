@@ -1,9 +1,9 @@
 {
   "bridge": {
     "name": "HomebridgeCuong",
-    "username": "CC:22:3D:E3:CE:30",
+    "username": "CC:22:3D:E3:CE:31",
     "port": 51826,
-    "pin": "038-45-154"
+    "pin": "888-88-888"
   },
 
   "description": "This is an example configuration file with one fake accessory and one fake platform. You can use this as a template for creating your own configuration file containing devices you actually own.",
@@ -15,6 +15,18 @@
       "name": "My iNels",
       "host": "http://20.15.10.1/api",
       "http_method": "PUT",
+      "on_body":{ "red": 100,
+        "green": 255,
+        "blue":100,
+        "brightness": 255,
+        "demo":"on"
+      },
+      "off_body": { "red": 100,
+        "green": 255,
+        "blue":0,
+        "brightness": 100,
+        "demo":"on"
+      },
       "multiswitch": [
         { "name" : "Lightbulb 1"     , "path" : "devices/49963" },
         { "name" : "Lightbulb 2"     , "path" : "devices/53139" }
