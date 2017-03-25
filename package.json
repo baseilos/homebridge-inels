@@ -1,5 +1,5 @@
 {
-  "name": "homebridge-inels",
+  "name": "homebridge-plugin-inels",
   "version": "1.0.0",
   "description": "A bridge for controlling inels devices through homebridge",
   "main": "index.js",
@@ -11,7 +11,7 @@
     "inels",
     "homebridge"
   ],
-  "author": "Jozef Lang <developer@jozeflang.com> (http://www.jozeflang.com)",
+  "author": "Jozef Lang, Cuong V. Nguyen, Robert Varga",
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/baseilos/homebridge-inels/issues"
