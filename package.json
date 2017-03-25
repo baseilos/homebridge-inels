@@ -9,7 +9,8 @@
   },
   "keywords": [
     "inels",
-    "homebridge"
+    "homebridge",
+    "homebridge-plugin"
   ],
   "author": "Jozef Lang, Cuong V. Nguyen, Robert Varga",
   "license": "GPL-3.0",
