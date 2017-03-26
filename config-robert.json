@@ -28,6 +28,26 @@
         "brightness": 100
       }
 
+    },
+    {
+      "accessory": "iNels",
+      "type": "switch",
+      "name": "kitchen light",
+      "host": "http://20.15.10.1/api/devices",
+      "on"  : "/49963",
+      "off" : "/49963",
+      "http_method": "PUT",
+      "on_body":{ "red": 100,
+        "green": 255,
+        "blue":100,
+        "brightness": 255
+      },
+      "off_body": { "red": 100,
+        "green": 255,
+        "blue":0,
+        "brightness": 100
+      }
+
     }
   ]
 }
