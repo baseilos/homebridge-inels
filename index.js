@@ -7,8 +7,212 @@ var request = require('request');
 module.exports = function (homebridge) {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
-    homebridge.registerAccessory('homebridge-inels', 'iNels', Inels);
+    //homebridge.registerAccessory('homebridge-inels', 'iNels', Inels);
+    homebridge.registerAccessory('homebridge-inels', 'RF-RGB-LED-550', RF_RGB_LED_550);
 };
+
+function RF_RGB_LED_550(log, config){
+    this.host = config.host;
+    this.name = config.name;
+    this.username        = config.username         || '';
+    this.password        = config.password         || '';
+    this.sendImmediately = config.send_immediately || ''; 
+    this.log = log;
+    this.model = "RF RGV LED 550";
+    this.manufacturer = "INELS";
+
+    this.services = [];
+//    this.informationService = new Service.AccessoryInformation();
+//    this.informationService
+//        .setCharacteristic(Characteristic.Manufacturer, this.manufacturer)
+//        .setCharacteristic(Characteristic.Model, this.model);
+//    this.services.push(this.informationService);
+
+    this.switchService = new Service.Switch(this.name);
+    this.switchService
+        .getCharacteristic(Characteristic.On)
+        .on('set', this.setItemState.bind(this))
+        .on('get', this.getItemState.bind(this))
+        .setValue(true);
+    this.services.push(this.switchService);
+
+    request.get({
+        url: this.host+"/state",
+    }, function(err, response, json) {
+        if (!err && response.statusCode == 200) {
+           this.switchService
+               .getCharacteristic(Characteristic.On)
+               .setValue(true);
+           this.log("XXXX" + json);
+        } else {
+            this.log("Platform - There was a problem connecting to OpenHAB.");
+        }
+      }.bind(this));
+
+};
+
+//RF_RGB_LED_550.prototype.callBack = function(value) {
+//    //function that gets called by the registered ws listener
+//    console.log("Got new state for switch: " + value);
+//    this.currentState = value;
+//
+//    //also make sure this change is directly communicated to HomeKit
+//    this.setFromInels = true;
+//    this.otherService
+//        .getCharacteristic(this.homebridge.hap.Characteristic.On)
+//        .setValue(this.currentState == '1',
+//            function() {
+//                this.setFromInels = false;
+//            }.bind(this)
+//        );
+//};
+//
+//RF_RGB_LED_550.prototype.getItemState = function(callback) {
+//    //returns true if currentState is 1
+//    callback(undefined, this.currentState == '1');
+//};
+//
+//RF_RGB_LED_550.prototype.onCommand = function() {
+//    //function to set the command to be used for On
+//    //for a switch, this is 'On', but subclasses can override this to eg Pulse
+//    return 'On';
+//};
+//
+//RF_RGB_LED_550.prototype.setItemState = function(value, callback) {
+//
+//    //sending new state to loxone
+//    //added some logic to prevent a loop when the change because of external event captured by callback
+//
+//    var self = this;
+//
+//    if (this.setInitialState) {
+//        this.setInitialState = false;
+//        callback();
+//        return;
+//    }
+//
+//    if (this.setFromInels) {
+//        callback();
+//        return;
+//    }
+//
+//    var command = (value == '1') ? this.onCommand() : 'Off';
+//    this.log("[switch] iOS - send message to " + this.name + ": " + command);
+//
+//    callback();
+//
+//};
+
+RF_RGB_LED_550.prototype = {
+
+    getServices: function () {
+        return this.services;
+    },
+
+//    getServices: function () {
+//        this.services = [];
+//        this.log.info("Get Services called!");
+//
+//
+//
+//
+////            .setValue(1);
+////            .on('set', this.setPowerState.bind(this, switchService))
+////            .on('get', this.getPowerState.bind(this, switchService))
+////            .setValue(true);
+//        return this.services;
+//    },
+
+callback: function(value) {
+    //function that gets called by the registered ws listener
+    console.log("Got new state for switch: " + value);
+    this.currentState = value;
+
+    //also make sure this change is directly communicated to HomeKit
+    this.setFromInels = true;
+    this.switchService
+        .getCharacteristic(Characteristic.On)
+//        .setValue(this.currentState == '1',
+//            function() {
+//                this.setFromInels = false;
+//            }.bind(this)
+//        );
+        .setValue(value);
+},
+
+getItemState: function(callback) {
+console.log ("XXXXXXXXXXXXXXXX");
+        request.get({
+            url: this.host+"/state",
+        }, function(err, response, json) {
+            if (!err && response.statusCode == 200) {
+
+               this.switchService
+                   .getCharacteristic(Characteristic.On)
+                   .setValue(json.brightness>0);
+               this.log("XXXX" + json);
+            } else {
+                this.log("Platform - There was a problem connecting to OpenHAB.");
+            }
+          }.bind(this));
+},
+
+onCommand: function() {
+    //function to set the command to be used for On
+    //for a switch, this is 'On', but subclasses can override this to eg Pulse
+    return 'On';
+},
+
+setItemState: function(value, callback) {
+
+    //sending new state to loxone
+    //added some logic to prevent a loop when the change because of external event captured by callback
+
+    var self = this;
+
+    if (this.setInitialState) {
+        this.setInitialState = false;
+        this.callback();
+        return;
+    }
+
+    if (this.setFromInels) {
+        callback();
+        return;
+    }
+
+    var command = (value == '1') ? this.onCommand() : 'Off';
+    this.log("[switch] iOS - send message to " + this.name + ": " + command);
+
+    this.callback();
+
+},
+
+    setPowerState: function(targetService, powerState, callback, context) {
+
+    request.get({
+        url: this.host + "/state",
+        json: true
+    }, function(err, response, json) {
+        if (!err && response.statusCode == 200) {
+           this.log(json);
+           var body = {}
+           body.red = 100,
+           body.green = 100,
+           body.blue = 100,
+           body.brightness = 255
+
+        } else {
+            this.log("Platform - There was a problem connecting to OpenHAB.");
+        }}.bind(this));
+    },
+    
+    identify: function (callback) {
+        this.log('INELS RF_RGB_LED_550 lightbulb');
+        callback();
+    }
+
+}
 
 function Inels(log, config) {
     this.log = log;
