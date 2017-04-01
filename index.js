@@ -29,9 +29,13 @@ function InelsPlatform(log, config, api) {
 }
 
 InelsPlatform.prototype.accessories = function(callback) {
-    console.log('Fantomas');
-    var json = JSON.parse('{"itemList": [{"type": "lightbulb"}]}');
-    callback(new Factory.Factory(this, Homebridge).parseSitemap(json));
+    var lightbulbAccessory = new Factory.LightbulbAccessory("RF-RGB-LED-550", this, Homebridge);
+    callback([lightbulbAccessory]);
+    //console.log(Homebridge);
+}
+
+InelsPlatform.prototype.addAccessory = function(accessoryName) {
+    console.log("Accessory: " + accessoryName);
 }
 
 
