@@ -9,8 +9,6 @@ var Platform;
 var Factory = require('./factory.js');
 var Utility = require('./utility.js');
 
-var request = require('request');
-
 module.exports = function (homebridge) {
     console.log("Homebridge " + homebridge.version + " is running");
     Homebridge = homebridge;
@@ -25,11 +23,14 @@ module.exports = function (homebridge) {
 };
 
 function InelsPlatform(log, config, api) {
-    console.log("InelsPlatform loaded");
+    this.log = log;
+    this.host = config.host;
+
+    log.log("InelsPlatform loaded");
 }
 
 InelsPlatform.prototype.accessories = function(callback) {
-    var lightbulbAccessory = new Factory.LightbulbAccessory("RF-RGB-LED-550", this, Homebridge);
+    var lightbulbAccessory = new Factory.LightbulbAccessory(12345, "RF-RGB-LED-550", this, Homebridge);
     callback([lightbulbAccessory]);
     //console.log(Homebridge);
 }
