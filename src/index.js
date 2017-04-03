@@ -52,15 +52,15 @@ function LIGHT_BULB(log, config) {
         .on('get', lightBulb.getBrightness.bind(lightBulb))
         .on('set', lightBulb.setBrightness.bind(lightBulb));
 
-    //this.lightBulbService
-    //    .getCharacteristic(Characteristic.Hue)
-    //    .on('get', lightBulb.getHue.bind(lightBulb))
-    //    .on('set', lightBulb.setHue.bind(lightBulb));
-    //
-    //this.lightBulbService
-    //    .getCharacteristic(Characteristic.Saturation)
-    //    .on('get', lightBulb.getHue.bind(lightBulb))
-    //    .on('set', lightBulb.setHue.bind(lightBulb));
+    this.lightBulbService
+        .getCharacteristic(Characteristic.Hue)
+        .on('get', lightBulb.getHue.bind(lightBulb))
+        .on('set', lightBulb.setHue.bind(lightBulb));
+
+    this.lightBulbService
+        .getCharacteristic(Characteristic.Saturation)
+        .on('get', lightBulb.getSaturation.bind(lightBulb))
+        .on('set', lightBulb.setSaturation.bind(lightBulb));
 
     this.services.push(this.lightBulbService);
 

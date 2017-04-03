@@ -1,4 +1,5 @@
 const request = require("request");
+var Util = require("./util");
 
 module.exports = class LightBulb {
 
@@ -6,17 +7,19 @@ module.exports = class LightBulb {
         this.id = id;
     }
 
+
     loadState() {
         request.get({
             url: `http://20.15.10.1/api/devices/${this.id}/state`
         }, (err, response, state) => {
             //TODO handle response status code (success, error...)
             this.state = JSON.parse(state);
-            console.log("loadState", this.state.brightness);
+            this.hslState = Util.rgbToHsl2(this.state.red, this.state.green, this.state.blue);
         });
     }
 
     sendCommand(command, callback) {
+        console.log (`Printing ${JSON.stringify(command)}`);
         request({
                 url: `http://20.15.10.1/api/devices/${this.id}`,
                 json: command,
@@ -28,18 +31,14 @@ module.exports = class LightBulb {
 
             },
             (error, response, body) => {
+                console.log(`Response ${JSON.stringify(response)}`);
                 callback();
             });
     }
 
     setOn(on, callback) {
-
-
         const command = Object.assign({}, this.state);
         command.brightness = on ? this.state.brightness : 0;
-
-        console.log("setOn", this.state.brightness);
-
         this.sendCommand(command, () => callback());
     }
 
@@ -49,17 +48,14 @@ module.exports = class LightBulb {
             callback(null, 0);
             return;
         }
-        console.log (`Current brightness from GET ${this.id} ${this.state.brightness}`);//backtick evaluates string
         callback(null, !!this.state.brightness);
     }
 
     // TODO: Original zlatko code
     setBrightness(brightness, callback) {
         if(!this.state) return;
-
         const command = Object.assign({}, this.state);
         command.brightness = brightness;
-
         this.sendCommand(command, () => callback());
     }
 
@@ -68,33 +64,45 @@ module.exports = class LightBulb {
             callback(null, 0);
             return;
         }
-        console.log (`Current brightness from GET ${this.id} ${this.state.brightness}`);//backtick evaluates string
         callback(null, this.state.brightness);
-        //return this.state ? this.state.brightness : 0;
     }
 
-    //getStatus (callback) {
-    //    callback(null, true);
-    //}
+    setHue(hue, callback) {
 
-    //setPowerState (value, callback, context) {
-    //    callback();
-    //}
-    //
-    //getBrightness (callback) {
-    //    callback(null, 50);
-    //}
+        if(!this.state) return;
+        this.hslState.h = hue;
 
-    //setBrightness (value, callback, context) {
-    //    callback();
-    //}
-    //
-    //getHue (callback) {
-    //    callback(null, 0.5);
-    //}
-    //
-    //setHue (value, callback, context) {
-    //    callback();
-    //}
+        var newState = Util.hslToRgb2(this.hslState.h,this.hslState.s,this.hslState.l);
+
+        this.state.red = newState.r;
+        this.state.green =  newState.g;
+        this.state.blue =  newState.b;
+
+        const command = Object.assign({}, this.state);
+
+        this.sendCommand(command, () => callback());
+    }
+
+    getHue(callback, context) {
+        if(!this.state) {
+            callback(null, 0);
+            return;
+        }
+        callback(null, this.hslState.h);
+    }
+
+    setSaturation(saturation, callback) {
+        this.hslState.s = saturation;
+        callback();
+    }
+
+    getSaturation(callback, context) {
+        if(!this.state) {
+            callback(null, 0);
+            return;
+        }
+
+        callback(null, this.hslState.s);
+    }
 
 };
