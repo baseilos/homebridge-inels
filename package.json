@@ -1,29 +1,21 @@
 {
-  "name": "homebridge-plugin-inels",
+  "name": "homebridge-inels-round2",
   "version": "1.0.0",
-  "description": "A bridge for controlling inels devices through homebridge",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/baseilos/homebridge-inels.git"
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "inels",
     "homebridge",
     "homebridge-plugin"
   ],
-  "author": "Jozef Lang, Cuong V. Nguyen, Robert Varga",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/baseilos/homebridge-inels/issues"
-  },
   "engines": {
-    "node": ">=0.12.0",
     "homebridge": ">=0.2.0"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "request": "^2.78.0",
-    "ws": "^1.1.1"
-  },
-  "homepage": "https://github.com/baseilos/homebridge-inels#readme"
+    "request": "^2.81.0"
+  }
 }
