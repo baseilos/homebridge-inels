@@ -8,7 +8,7 @@ module.exports = class Plug {
 
     loadState() {
         request.get({
-            url: `http://20.15.10.1/api/devices/${this.id}/state`
+            url: url
         }, (err, response, state) => {
             //TODO handle response status code (success, error...)
             this.state = JSON.parse(state);

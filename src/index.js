@@ -1,5 +1,6 @@
 const LightBulb = require("./light-bulb");
 const Plug = require("./plug");
+const Config = require("./config");
 
 let Service;
 let Characteristic;
@@ -17,6 +18,7 @@ function PLUG(log, config) {
 
     this.services = [];
     const plug = new Plug(config.id);
+    Config.storeDevice(plug.id, plug);
     plug.loadState();
 
     this.plugService = new Service.Switch(config.name);
@@ -39,6 +41,7 @@ function LIGHT_BULB(log, config) {
     this.services = [];
 
     const lightBulb = new LightBulb(config.id);
+    Config.storeDevice(lightBulb.id, lightBulb);
     lightBulb.loadState();
 
     this.lightBulbService = new Service.Lightbulb(config.name);
