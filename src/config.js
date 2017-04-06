@@ -1,6 +1,6 @@
 var HashMap = require('hashmap');
 
-module.exports = class Config {
+ class Config {
 
     constructor() {
         this.devices = new HashMap();
@@ -15,3 +15,7 @@ module.exports = class Config {
         return this.devices.get(deviceId);
     }
 };
+
+const conf = new Config();
+
+module.exports.getInstance = () => conf;

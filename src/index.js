@@ -1,9 +1,10 @@
 const LightBulb = require("./light-bulb");
 const Plug = require("./plug");
-const Config = require("./config");
+const Conf = require("./config");
 
 let Service;
 let Characteristic;
+const configMap = Conf.getInstance();
 
 module.exports = (homebridge) => {
     Service = homebridge.hap.Service;
@@ -18,8 +19,9 @@ function PLUG(log, config) {
 
     this.services = [];
     const plug = new Plug(config.id);
-    Config.storeDevice(plug.id, plug);
     plug.loadState();
+
+    configMap.storeDevice(plug.id, plug);
 
     this.plugService = new Service.Switch(config.name);
     this.plugService
@@ -41,8 +43,9 @@ function LIGHT_BULB(log, config) {
     this.services = [];
 
     const lightBulb = new LightBulb(config.id);
-    Config.storeDevice(lightBulb.id, lightBulb);
     lightBulb.loadState();
+
+    configMap.storeDevice(lightBulb.id, lightBulb);
 
     this.lightBulbService = new Service.Lightbulb(config.name);
     this.lightBulbService
