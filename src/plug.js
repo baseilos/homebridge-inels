@@ -2,8 +2,9 @@ const request = require("request");
 
 module.exports = class Plug {
 
-    constructor(id) {
+    constructor(id, name) {
         this.id = id;
+        this.name = name;
     }
 
     loadState() {
@@ -12,7 +13,6 @@ module.exports = class Plug {
         }, (err, response, state) => {
             //TODO handle response status code (success, error...)
             this.state = JSON.parse(state);
-            console.log("loadState XXXXXX", this.state.on);
         });
     }
 

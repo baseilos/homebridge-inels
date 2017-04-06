@@ -3,8 +3,9 @@ var Util = require("./util");
 
 module.exports = class LightBulb {
 
-    constructor(id) {
+    constructor(id, name) {
         this.id = id;
+        this.name = name;
     }
 
 

@@ -16,6 +16,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "websocket": "^1.0.24",
+    "parse-color": "^1.0.0",
+    "hashmap": "^2.0.6"
   }
 }

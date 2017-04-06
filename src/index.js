@@ -6,6 +6,31 @@ let Service;
 let Characteristic;
 const configMap = Conf.getInstance();
 
+var WebSocketClient = require('websocket').client;
+
+var client = new WebSocketClient();
+
+client.on('connectFailed', function(error) {
+    console.log('Error while trying to connect: ' + error.toString());
+});
+
+client.on('connect', function(connection) {
+    console.log('WebSocket Client Connected');
+    connection.on('error', function(error) {
+        console.log("Connection Error: " + error.toString());
+    });
+    connection.on('close', function() {
+        console.log('Connection closed');
+    });
+    connection.on('message', function(message) {
+            console.log("Received: '" + message.utf8Data + "'");
+            console.log("Data ID: " + configMap.retrieveDevice(message.utf8Data.substring(message.utf8Data.lastIndexOf('/') + 1)).name);
+    });
+
+});
+
+client.connect('ws://20.15.10.1/api/ws');
+
 module.exports = (homebridge) => {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
@@ -18,7 +43,7 @@ function PLUG(log, config) {
     console.log(config.name);
 
     this.services = [];
-    const plug = new Plug(config.id);
+    const plug = new Plug(config.id, config.name);
     plug.loadState();
 
     configMap.storeDevice(plug.id, plug);
@@ -42,7 +67,7 @@ function LIGHT_BULB(log, config) {
 
     this.services = [];
 
-    const lightBulb = new LightBulb(config.id);
+    const lightBulb = new LightBulb(config.id, config.name);
     lightBulb.loadState();
 
     configMap.storeDevice(lightBulb.id, lightBulb);
