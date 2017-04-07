@@ -2,9 +2,10 @@ const request = require("request");
 
 module.exports = class Plug {
 
-    constructor(id, name) {
+    constructor(id, name, services) {
         this.id = id;
         this.name = name;
+        this.services = services;
     }
 
     loadState() {

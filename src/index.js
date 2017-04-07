@@ -24,7 +24,9 @@ client.on('connect', function(connection) {
     });
     connection.on('message', function(message) {
             console.log("Received: '" + message.utf8Data + "'");
-            console.log("Data ID: " + configMap.retrieveDevice(message.utf8Data.substring(message.utf8Data.lastIndexOf('/') + 1)).name);
+            var device = configMap.retrieveDevice(message.utf8Data.substring(message.utf8Data.lastIndexOf('/') + 1));
+            device.services.getCharacteristic(Characteristic.Brightness)
+            .setValue(33);
     });
 
 });
@@ -43,7 +45,7 @@ function PLUG(log, config) {
     console.log(config.name);
 
     this.services = [];
-    const plug = new Plug(config.id, config.name);
+    const plug = new Plug(config.id, config.name, this.services);
     plug.loadState();
 
     configMap.storeDevice(plug.id, plug);
@@ -67,7 +69,7 @@ function LIGHT_BULB(log, config) {
 
     this.services = [];
 
-    const lightBulb = new LightBulb(config.id, config.name);
+    const lightBulb = new LightBulb(config.id, config.name, this.services);
     lightBulb.loadState();
 
     configMap.storeDevice(lightBulb.id, lightBulb);
